@@ -12,7 +12,11 @@ import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { BiGithub, ViFileTypeTypescript, ViFileTypeVue } from "oh-vue-icons/icons";
+import {
+  BiGithub,
+  ViFileTypeTypescript,
+  ViFileTypeVue,
+} from "oh-vue-icons/icons";
 
 addIcons(BiGithub, ViFileTypeTypescript, ViFileTypeVue);
 

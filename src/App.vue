@@ -4,7 +4,7 @@ import { isNavigating } from "./router";
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-950">
+  <div class="min-h-screen bg-gray-50 text-gray-950">
     <Transition name="fade">
       <div
         v-if="isNavigating"
