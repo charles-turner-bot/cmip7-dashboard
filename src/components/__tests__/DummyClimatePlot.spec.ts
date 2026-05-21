@@ -15,8 +15,8 @@ describe("DummyClimatePlot", () => {
     const wrapper = mount(DummyClimatePlot);
 
     expect(wrapper.text()).toContain("CMIP7 readiness signal");
-    expect(wrapper.text()).toContain("51.8 index");
-    expect(wrapper.text()).toContain("Current change: +10.6 index points");
+    expect(wrapper.text()).toContain("1.74 TCRE");
+    expect(wrapper.text()).toContain("Model 1 change: +0.20 TCRE.");
     expect(wrapper.find('[data-test="line-chart"]').exists()).toBe(true);
   });
 });

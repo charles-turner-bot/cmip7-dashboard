@@ -5,22 +5,52 @@ export interface PlotPoint {
   value: number;
 }
 
-export function useDummyClimatePlot(points: Ref<PlotPoint[]>) {
-  const labels = computed(() => points.value.map((point) => point.label));
-  const values = computed(() => points.value.map((point) => point.value));
+export interface PlotSeries {
+  label: string;
+  color: string;
+  points: PlotPoint[];
+}
 
-  const latestValue = computed(() => points.value.at(-1)?.value ?? null);
-  const firstValue = computed(() => points.value.at(0)?.value ?? null);
-  const delta = computed(() => {
-    if (latestValue.value === null || firstValue.value === null) return null;
-    return roundToOneDecimal(latestValue.value - firstValue.value);
-  });
+export function useDummyClimatePlot(series: Ref<PlotSeries[]>) {
+  const labels = computed(
+    () => series.value.at(0)?.points.map((point) => point.label) ?? [],
+  );
+
+  const rawSeries = computed(() =>
+    series.value.map((item) => ({
+      label: item.label,
+      color: item.color,
+      values: item.points.map((point) => point.value),
+    })),
+  );
+
+  const latestValues = computed(() =>
+    rawSeries.value.map((item) => ({
+      label: item.label,
+      value: item.values.at(-1) ?? null,
+    })),
+  );
+
+  const deltas = computed(() =>
+    rawSeries.value.map((item) => {
+      const firstValue = item.values.at(0);
+      const latestValue = item.values.at(-1);
+
+      return {
+        label: item.label,
+        value:
+          firstValue === undefined || latestValue === undefined
+            ? null
+            : roundToOneDecimal(latestValue - firstValue),
+      };
+    }),
+  );
 
   return {
     labels,
-    values,
-    latestValue,
-    delta,
+    rawSeries,
+    latestValues,
+    deltas,
   };
 }
 

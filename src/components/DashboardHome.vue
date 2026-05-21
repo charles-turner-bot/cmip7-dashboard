@@ -25,8 +25,8 @@
         CMIP7 Dashboard
       </h1>
       <p class="text-sm leading-relaxed text-gray-500 sm:text-base">
-        A lightweight interface for exploring CMIP7 model outputs, dataset
-        readiness, and dashboard workflows as the catalogue takes shape.
+        A lightweight interface for tracking climate model outputs and derived
+        metrics as runs progress.
       </p>
     </section>
 
@@ -55,9 +55,10 @@
     >
       <h2 class="text-sm font-semibold uppercase text-gray-700">About</h2>
       <p>
-        This scaffold will become a browser-based view over CMIP7 data products
-        and derived indicators. For now it keeps the app shell, routing,
-        telemetry, test setup, and data-visualisation dependencies in place.
+        This scaffold will become a browser-based view over CMIP7 model runs and
+        derived indicators such as TCRE. For now it keeps the app shell,
+        routing, telemetry, test setup, and data-visualisation dependencies in
+        place.
       </p>
       <div
         class="flex flex-wrap items-center gap-3 border-t border-gray-200 pt-3"
@@ -84,7 +85,7 @@ import DummyClimatePlot from "./DummyClimatePlot.vue";
 
 const statusCards = [
   { label: "App", value: "Vue 3 + Vite" },
-  { label: "Maps", value: "MapLibre-ready" },
+  { label: "Metrics", value: "TCRE-ready" },
   { label: "Charts", value: "Chart.js-ready" },
 ];
 </script>

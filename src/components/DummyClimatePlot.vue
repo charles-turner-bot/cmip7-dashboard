@@ -14,7 +14,7 @@
       <div class="rounded-lg bg-blue-50 px-3 py-2 text-right">
         <p class="text-xs text-gray-500">Latest</p>
         <p class="text-sm font-semibold text-blue-700">
-          {{ plot.latestValue.value?.toFixed(1) }} index
+          {{ primaryLatest }} TCRE
         </p>
       </div>
     </div>
@@ -25,7 +25,7 @@
 
     <p class="mt-4 text-xs leading-relaxed text-gray-500">
       Dummy values are standing in for a future parquet-backed data source.
-      Current change: {{ signedDelta }} index points.
+      {{ primaryDeltaCopy }}
     </p>
   </section>
 </template>
@@ -47,7 +47,7 @@ import {
 import { Line } from "vue-chartjs";
 import {
   useDummyClimatePlot,
-  type PlotPoint,
+  type PlotSeries,
 } from "@/composables/useDummyClimatePlot";
 
 ChartJS.register(
@@ -61,37 +61,63 @@ ChartJS.register(
 );
 
 // Replace this stub with rows from loadParquetDataSource/useParquetDataSource once the real CMIP7 source shape is fixed.
-const dummySeries = ref<PlotPoint[]>([
-  { label: "2027", value: 41.2 },
-  { label: "2028", value: 43.1 },
-  { label: "2029", value: 42.6 },
-  { label: "2030", value: 45.3 },
-  { label: "2031", value: 46.7 },
-  { label: "2032", value: 48.4 },
-  { label: "2033", value: 50.1 },
-  { label: "2034", value: 51.8 },
+const dummySeries = ref<PlotSeries[]>([
+  {
+    label: "Model 1",
+    color: "#2563eb",
+    points: [
+      { label: "2027", value: 1.55 },
+      { label: "2028", value: 1.58 },
+      { label: "2029", value: 1.6 },
+      { label: "2030", value: 1.62 },
+      { label: "2031", value: 1.66 },
+      { label: "2032", value: 1.69 },
+      { label: "2033", value: 1.71 },
+      { label: "2034", value: 1.74 },
+    ],
+  },
+  {
+    label: "Model 2",
+    color: "#f97316",
+    points: [
+      { label: "2027", value: 1.42 },
+      { label: "2028", value: 1.45 },
+      { label: "2029", value: 1.47 },
+      { label: "2030", value: 1.51 },
+      { label: "2031", value: 1.53 },
+      { label: "2032", value: 1.55 },
+      { label: "2033", value: 1.59 },
+      { label: "2034", value: 1.62 },
+    ],
+  },
 ]);
 
 const plot = useDummyClimatePlot(dummySeries);
 
-const signedDelta = computed(() => {
-  if (plot.delta.value === null) return "n/a";
-  return `${plot.delta.value >= 0 ? "+" : ""}${plot.delta.value.toFixed(1)}`;
+const primaryLatest = computed(() => {
+  const value = plot.latestValues.value.at(0)?.value;
+  return value === null || value === undefined ? "n/a" : value.toFixed(2);
+});
+
+const primaryDeltaCopy = computed(() => {
+  const delta = plot.deltas.value.at(0)?.value;
+  if (delta === null || delta === undefined) return "No change available yet.";
+
+  const signedDelta = `${delta >= 0 ? "+" : ""}${delta.toFixed(2)}`;
+  return `Model 1 change: ${signedDelta} TCRE.`;
 });
 
 const chartData = computed(() => ({
   labels: plot.labels.value,
-  datasets: [
-    {
-      label: "Raw value",
-      data: plot.values.value,
-      borderColor: "#2563eb",
-      borderWidth: 2,
-      pointBackgroundColor: "#2563eb",
-      pointRadius: 3,
-      tension: 0,
-    },
-  ],
+  datasets: plot.rawSeries.value.map((series) => ({
+    label: series.label,
+    data: series.values,
+    borderColor: series.color,
+    borderWidth: 2,
+    pointBackgroundColor: series.color,
+    pointRadius: 3,
+    tension: 0,
+  })),
 }));
 
 const chartOptions = computed<ChartOptions<"line">>(() => ({
@@ -111,7 +137,7 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
       callbacks: {
         label: (ctx: TooltipItem<"line">) =>
           ctx.parsed.y !== null
-            ? `${ctx.dataset.label ?? "Value"}: ${ctx.parsed.y.toFixed(1)}`
+            ? `${ctx.dataset.label ?? "Value"}: ${ctx.parsed.y.toFixed(2)} TCRE`
             : "",
       },
     },
@@ -124,7 +150,7 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
     y: {
       title: {
         display: true,
-        text: "Dummy index",
+        text: "TCRE",
         color: "#4b5563",
       },
       ticks: { color: "#6b7280" },
