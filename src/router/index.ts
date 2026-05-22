@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { ref } from "vue";
-import { posthog } from "@/composables/usePosthog";
+import { usePosthog } from "@/composables/usePosthog";
 
 const routes = [
   {
@@ -19,6 +19,7 @@ const router = createRouter({
 });
 
 export const isNavigating = ref(false);
+const { capture } = usePosthog();
 
 router.beforeEach((to, _from, next) => {
   isNavigating.value = true;
@@ -29,7 +30,7 @@ router.beforeEach((to, _from, next) => {
 });
 
 router.afterEach((to) => {
-  posthog.capture("$pageview", { path: to.fullPath, name: to.name });
+  capture("$pageview", { path: to.fullPath, name: to.name });
   setTimeout(() => {
     isNavigating.value = false;
   }, 100);
