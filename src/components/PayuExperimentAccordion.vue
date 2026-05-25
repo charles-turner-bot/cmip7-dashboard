@@ -53,20 +53,45 @@
         data-test="accordion-item"
       >
         <AccordionHeader data-test="accordion-trigger">
-          <div class="flex min-w-0 flex-1 items-center gap-4">
-            <span
-              class="min-w-0 flex-1 truncate text-sm font-medium text-gray-800 dark:!text-gray-100"
-            >
-              {{ experiment.name }}
-            </span>
-            <span class="shrink-0 text-xs text-gray-400 dark:text-gray-400">
-              {{ experiment.modelCurrentTime }}
-            </span>
-            <span
-              class="shrink-0 rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-            >
-              {{ experiment.serviceUnitsDisplay }} SU
-            </span>
+          <div class="flex min-w-0 flex-1 flex-col gap-3 py-1 sm:flex-row sm:items-center">
+            <div class="min-w-0 flex-1">
+              <div class="flex min-w-0 items-center gap-4">
+                <span
+                  class="min-w-0 flex-1 truncate text-sm font-medium text-gray-800 dark:!text-gray-100"
+                >
+                  {{ experiment.name }}
+                </span>
+                <span class="shrink-0 text-xs text-gray-400 dark:text-gray-400">
+                  {{ experiment.modelCurrentTime }}
+                </span>
+                <span
+                  class="shrink-0 rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+                >
+                  {{ experiment.serviceUnitsDisplay }} SU
+                </span>
+              </div>
+
+              <div class="mt-2 flex items-center gap-3" data-test="progress-row">
+                <div
+                  class="relative h-3 w-full max-w-xs overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-600 dark:bg-gray-800"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="h-full rounded-full transition-all duration-500"
+                    :class="progressFillClass(experiment.progress.tone)"
+                    :style="progressStyle(experiment.progress.percent)"
+                    data-test="progress-fill"
+                  />
+                </div>
+                <span
+                  class="shrink-0 text-xs font-medium"
+                  :class="progressTextClass(experiment.progress.tone)"
+                  data-test="progress-label"
+                >
+                  {{ experiment.progress.label }}
+                </span>
+              </div>
+            </div>
           </div>
         </AccordionHeader>
 
@@ -135,6 +160,36 @@ function formatKey(key: string): string {
 function formatValue(value: unknown): string {
   if (value === null || value === undefined) return "—";
   return String(value);
+}
+
+function progressStyle(percent: number | null): { width: string } {
+  return { width: `${percent ?? 0}%` };
+}
+
+function progressFillClass(tone: PayuExperiment["progress"]["tone"]): string {
+  switch (tone) {
+    case "red":
+      return "bg-red-500 dark:bg-red-400";
+    case "yellow":
+      return "bg-yellow-400 dark:bg-yellow-300";
+    case "green":
+      return "bg-green-500 dark:bg-green-400";
+    default:
+      return "bg-gray-300 dark:bg-gray-500";
+  }
+}
+
+function progressTextClass(tone: PayuExperiment["progress"]["tone"]): string {
+  switch (tone) {
+    case "red":
+      return "text-red-600 dark:text-red-400";
+    case "yellow":
+      return "text-yellow-700 dark:text-yellow-300";
+    case "green":
+      return "text-green-700 dark:text-green-300";
+    default:
+      return "text-gray-500 dark:text-gray-400";
+  }
 }
 </script>
 
