@@ -62,7 +62,10 @@
               {{ experiment.name }}
             </span>
 
-            <div class="row-start-2 sm:col-start-1 sm:row-start-2" data-test="progress-row">
+            <div
+              class="row-start-2 sm:col-start-1 sm:row-start-2"
+              data-test="progress-row"
+            >
               <div
                 class="relative h-6 w-full overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-600 dark:bg-gray-800 sm:max-w-xs"
                 aria-hidden="true"
@@ -181,7 +184,6 @@ function progressFillClass(tone: PayuExperiment["progress"]["tone"]): string {
       return "bg-gray-300 dark:bg-gray-500";
   }
 }
-
 </script>
 
 <style scoped>
