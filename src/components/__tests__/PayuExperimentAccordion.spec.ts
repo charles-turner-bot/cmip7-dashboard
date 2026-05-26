@@ -39,12 +39,15 @@ const MOCK_EXPERIMENTS: PayuExperiment[] = [
     uuid: "e523e199-80f6-4ca6-b84a-e513a16f2029",
     modelStartTime: "0101-01-01T00:00:00",
     modelCurrentTime: "0275-01-01T00:00:00",
+    modelEndTime: "1000-01-01T00:00:00",
     serviceUnitsDisplay: "1",
+    progress: { percent: 19, label: "19% complete", tone: "red" },
     details: {
       experiment_name: "Ndep2-PI-CNP-concentrations",
       experiment_uuid: "e523e199-80f6-4ca6-b84a-e513a16f2029",
       experiment_model_start_time: "0101-01-01T00:00:00",
       experiment_model_current_time: "0275-01-01T00:00:00",
+      experiment_model_end_time: "1000-01-01T00:00:00",
       experiment_service_units_used: 1,
     },
   },
@@ -53,12 +56,15 @@ const MOCK_EXPERIMENTS: PayuExperiment[] = [
     uuid: "f9e8d7c6-fedc-ba98-7654-321012345678",
     modelStartTime: "0001-01-01T00:00:00",
     modelCurrentTime: "0050-01-01T00:00:00",
+    modelEndTime: "0100-01-01T00:00:00",
     serviceUnitsDisplay: "0",
+    progress: { percent: 49, label: "49% complete", tone: "yellow" },
     details: {
       experiment_name: "piControl-spun-up",
       experiment_uuid: "f9e8d7c6-fedc-ba98-7654-321012345678",
       experiment_model_start_time: "0001-01-01T00:00:00",
       experiment_model_current_time: "0050-01-01T00:00:00",
+      experiment_model_end_time: "0100-01-01T00:00:00",
       experiment_service_units_used: 0,
     },
   },
@@ -82,6 +88,7 @@ describe("PayuExperimentAccordion", () => {
 
     expect(wrapper.text()).toContain("0275-01-01T00:00:00");
     expect(wrapper.text()).toContain("1 SU");
+    expect(wrapper.text()).toContain("19% complete");
   });
 
   it("renders all detail fields in the expanded panel", () => {

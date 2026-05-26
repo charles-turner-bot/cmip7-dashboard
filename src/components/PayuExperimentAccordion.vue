@@ -53,20 +53,51 @@
         data-test="accordion-item"
       >
         <AccordionHeader data-test="accordion-trigger">
-          <div class="flex min-w-0 flex-1 items-center gap-4">
+          <div
+            class="grid min-w-0 flex-1 grid-cols-1 grid-rows-[auto_auto_auto] gap-y-2 py-1 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:grid-rows-[auto_auto] sm:items-center sm:gap-x-4"
+          >
             <span
-              class="min-w-0 flex-1 truncate text-sm font-medium text-gray-800 dark:!text-gray-100"
+              class="row-start-1 min-w-0 truncate text-sm font-medium text-gray-800 dark:!text-gray-100 sm:col-start-1 sm:row-start-1"
             >
               {{ experiment.name }}
             </span>
-            <span class="shrink-0 text-xs text-gray-400 dark:text-gray-400">
-              {{ experiment.modelCurrentTime }}
-            </span>
-            <span
-              class="shrink-0 rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+
+            <div
+              class="row-start-2 sm:col-start-1 sm:row-start-2"
+              data-test="progress-row"
             >
-              {{ experiment.serviceUnitsDisplay }} SU
-            </span>
+              <div
+                class="relative h-6 w-full overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-600 dark:bg-gray-800 sm:max-w-xs"
+                aria-hidden="true"
+              >
+                <div
+                  class="h-full rounded-full transition-all duration-500"
+                  :class="progressFillClass(experiment.progress.tone)"
+                  :style="progressStyle(experiment.progress.percent)"
+                  data-test="progress-fill"
+                />
+                <span
+                  class="pointer-events-none absolute inset-0 flex items-center justify-center text-[10px] font-semibold text-gray-700 dark:text-gray-200"
+                  data-test="progress-label"
+                >
+                  {{ experiment.progress.label }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="row-start-3 flex items-center justify-between gap-3 sm:col-start-2 sm:col-span-2 sm:row-start-1 sm:row-span-2 sm:justify-end sm:self-center"
+            >
+              <span class="text-xs text-gray-400 dark:text-gray-400">
+                {{ experiment.modelCurrentTime }}
+              </span>
+
+              <span
+                class="rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+              >
+                {{ experiment.serviceUnitsDisplay }} SU
+              </span>
+            </div>
           </div>
         </AccordionHeader>
 
@@ -135,6 +166,23 @@ function formatKey(key: string): string {
 function formatValue(value: unknown): string {
   if (value === null || value === undefined) return "—";
   return String(value);
+}
+
+function progressStyle(percent: number | null): { width: string } {
+  return { width: `${percent ?? 0}%` };
+}
+
+function progressFillClass(tone: PayuExperiment["progress"]["tone"]): string {
+  switch (tone) {
+    case "red":
+      return "bg-red-500 dark:bg-red-400";
+    case "yellow":
+      return "bg-yellow-400 dark:bg-yellow-300";
+    case "green":
+      return "bg-green-500 dark:bg-green-400";
+    default:
+      return "bg-gray-300 dark:bg-gray-500";
+  }
 }
 </script>
 
