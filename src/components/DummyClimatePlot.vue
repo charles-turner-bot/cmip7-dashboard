@@ -19,7 +19,7 @@
         </p>
         <p class="mt-1">
           <UBadge color="primary" variant="soft" size="md">
-          {{ primaryLatest }} tas
+            {{ primaryLatest }} tas
           </UBadge>
         </p>
       </div>

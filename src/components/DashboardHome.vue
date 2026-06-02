@@ -33,11 +33,7 @@
       class="mx-auto mb-12 grid max-w-2xl gap-4 sm:grid-cols-3"
       aria-label="Dashboard status"
     >
-      <UCard
-        v-for="item in statusCards"
-        :key="item.label"
-        class="px-5 py-4"
-      >
+      <UCard v-for="item in statusCards" :key="item.label" class="px-5 py-4">
         <p
           class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500"
         >
@@ -57,7 +53,9 @@
       :error="payuError"
     />
 
-    <UCard class="mx-auto mb-12 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+    <UCard
+      class="mx-auto mb-12 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400"
+    >
       <h2
         class="text-sm font-semibold uppercase text-gray-700 dark:text-gray-200"
       >
@@ -72,7 +70,9 @@
       <div
         class="flex flex-wrap items-center gap-3 border-t border-gray-200 pt-3 dark:border-gray-700"
       >
-        <span class="text-xs text-gray-400 dark:text-gray-500">Built with ACCESS-NRI tooling</span>
+        <span class="text-xs text-gray-400 dark:text-gray-500"
+          >Built with ACCESS-NRI tooling</span
+        >
         <UBadge color="neutral" variant="soft">Nuxt UI</UBadge>
         <a
           href="https://www.access-nri.org.au"
