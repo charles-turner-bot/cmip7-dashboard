@@ -18,7 +18,6 @@
           >
             Home
           </NuxtLink>
-          <UBadge color="neutral" variant="outline" size="sm">Nuxt UI</UBadge>
         </nav>
       </div>
     </UCard>
