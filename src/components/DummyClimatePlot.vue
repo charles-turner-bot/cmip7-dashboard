@@ -1,7 +1,5 @@
 <template>
-  <section
-    class="mx-auto mb-12 max-w-2xl rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800"
-  >
+  <UCard class="mx-auto mb-12 max-w-2xl">
     <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
       <div>
         <p
@@ -15,14 +13,14 @@
           CMIP7 readiness signal
         </h2>
       </div>
-      <div
-        class="rounded-lg bg-blue-50 px-3 py-2 text-right dark:bg-blue-950/40"
-      >
+      <div class="text-right">
         <p class="text-xs text-gray-500 dark:text-gray-400">
           {{ sourceStatusLabel }}
         </p>
-        <p class="text-sm font-semibold text-blue-700 dark:text-blue-400">
-          {{ primaryLatest }} tas
+        <p class="mt-1">
+          <UBadge color="primary" variant="soft" size="md">
+            {{ primaryLatest }} tas
+          </UBadge>
         </p>
       </div>
     </div>
@@ -35,7 +33,7 @@
       {{ sourceCopy }}
       {{ primaryDeltaCopy }}
     </p>
-  </section>
+  </UCard>
 </template>
 
 <script setup lang="ts">

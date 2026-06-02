@@ -1,6 +1,7 @@
-import * as duckdb from "@duckdb/duckdb-wasm";
 import duckdbWasm from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url";
 import duckdbWorker from "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url";
+
+import type * as duckdb from "@duckdb/duckdb-wasm";
 
 export interface DuckDbConnection {
   db: duckdb.AsyncDuckDB;
@@ -15,6 +16,7 @@ const DUCKDB_BUNDLES: duckdb.DuckDBBundles = {
 };
 
 export async function initializeDuckDB(): Promise<DuckDbConnection> {
+  const duckdb = await import("@duckdb/duckdb-wasm");
   const bundle = DUCKDB_BUNDLES.mvp;
   const worker = new Worker(bundle.mainWorker!);
   const logger = new duckdb.ConsoleLogger();

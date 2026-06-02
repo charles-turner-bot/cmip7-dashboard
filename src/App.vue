@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AppHeader from "./components/AppHeader.vue";
-import { isNavigating } from "./router";
+import { useNavigationState } from "~/composables/useNavigationState";
+
+const isNavigating = useNavigationState();
 </script>
 
 <template>
@@ -26,7 +28,7 @@ import { isNavigating } from "./router";
     </Transition>
 
     <AppHeader />
-    <RouterView />
+    <NuxtPage />
   </div>
 </template>
 

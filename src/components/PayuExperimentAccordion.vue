@@ -39,20 +39,21 @@
     </div>
 
     <!-- Accordion list -->
-    <Accordion
-      v-else
-      v-model:value="openPanels"
-      multiple
-      class="payu-accordion"
-      data-test="payu-accordion"
-    >
-      <AccordionPanel
+    <div v-else class="divide-y divide-gray-100 dark:divide-gray-700">
+      <UCollapsible
         v-for="experiment in experiments"
         :key="experiment.uuid"
-        :value="experiment.uuid"
+        :open="isPanelOpen(experiment.uuid)"
+        :unmount-on-hide="false"
+        class="payu-collapsible"
         data-test="accordion-item"
+        @update:open="(value) => setPanelOpen(experiment.uuid, value)"
       >
-        <AccordionHeader data-test="accordion-trigger">
+        <button
+          type="button"
+          class="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/70"
+          data-test="accordion-trigger"
+        >
           <div class="flex min-w-0 flex-1 items-center gap-4">
             <span
               class="min-w-0 flex-1 truncate text-sm font-medium text-gray-800 dark:!text-gray-100"
@@ -62,46 +63,42 @@
             <span class="shrink-0 text-xs text-gray-400 dark:text-gray-400">
               {{ experiment.modelCurrentTime }}
             </span>
-            <span
-              class="shrink-0 rounded bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-            >
+            <UBadge color="primary" variant="soft" class="shrink-0">
               {{ experiment.serviceUnitsDisplay }} SU
-            </span>
+            </UBadge>
           </div>
-        </AccordionHeader>
+        </button>
 
-        <AccordionContent data-test="accordion-content">
-          <dl class="grid grid-cols-1 gap-y-2 px-1 py-2 sm:grid-cols-2">
-            <template
-              v-for="[key, value] in Object.entries(experiment.details)"
-              :key="key"
-            >
-              <div class="min-w-0">
-                <dt
-                  class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500"
-                >
-                  {{ formatKey(key) }}
-                </dt>
-                <dd
-                  class="mt-0.5 break-all text-sm text-gray-700 dark:text-gray-300"
-                >
-                  {{ formatValue(value) }}
-                </dd>
-              </div>
-            </template>
-          </dl>
-        </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+        <template #content>
+          <div data-test="accordion-content" class="px-5 pb-5 pt-0">
+            <dl class="grid grid-cols-1 gap-y-2 sm:grid-cols-2">
+              <template
+                v-for="[key, value] in Object.entries(experiment.details)"
+                :key="key"
+              >
+                <div class="min-w-0">
+                  <dt
+                    class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500"
+                  >
+                    {{ formatKey(key) }}
+                  </dt>
+                  <dd
+                    class="mt-0.5 break-all text-sm text-gray-700 dark:text-gray-300"
+                  >
+                    {{ formatValue(value) }}
+                  </dd>
+                </div>
+              </template>
+            </dl>
+          </div>
+        </template>
+      </UCollapsible>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import Accordion from "primevue/accordion";
-import AccordionPanel from "primevue/accordionpanel";
-import AccordionHeader from "primevue/accordionheader";
-import AccordionContent from "primevue/accordioncontent";
 import type { PayuExperiment } from "@/services/payuExperiments";
 
 const props = withDefaults(
@@ -124,6 +121,21 @@ const openPanels = ref<string[]>([]);
 // Expose for testing
 defineExpose({ openPanels });
 
+function isPanelOpen(uuid: string): boolean {
+  return openPanels.value.includes(uuid);
+}
+
+function setPanelOpen(uuid: string, isOpen: boolean): void {
+  if (isOpen) {
+    if (!openPanels.value.includes(uuid)) {
+      openPanels.value = [...openPanels.value, uuid];
+    }
+    return;
+  }
+
+  openPanels.value = openPanels.value.filter((panelUuid) => panelUuid !== uuid);
+}
+
 // ---------------------------------------------------------------------------
 // Formatting helpers
 // ---------------------------------------------------------------------------
@@ -139,18 +151,25 @@ function formatValue(value: unknown): string {
 </script>
 
 <style scoped>
+.payu-collapsible {
+  border-top: 1px solid rgb(243 244 246);
+}
+
+:deep(.dark .payu-collapsible) {
+  border-top-color: rgb(55 65 81);
+}
+
+.payu-collapsible:first-child {
+  border-top: 0;
+}
+
+:deep(.dark .payu-collapsible > button) {
+  color: #f3f4f6;
+}
+
 @media (prefers-color-scheme: dark) {
-  /* Override PrimeVue Aura CSS variables for the accordion in dark mode */
-  :deep(.payu-accordion) {
-    --p-accordion-panel-border-color: #374151;
-    --p-accordion-header-background: #1f2937;
-    --p-accordion-header-hover-background: #374151;
-    --p-accordion-header-active-background: #1f2937;
-    --p-accordion-header-color: #f3f4f6;
-    --p-accordion-header-hover-color: #ffffff;
-    --p-accordion-header-active-color: #ffffff;
-    --p-accordion-content-background: #111827;
-    --p-accordion-content-color: #d1d5db;
+  :deep(.payu-collapsible > button:hover) {
+    background-color: rgb(31 41 55 / 0.7);
   }
 }
 </style>
