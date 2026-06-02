@@ -1,9 +1,6 @@
 <template>
   <main class="container mx-auto px-6 pt-6">
-    <section
-      id="hero"
-      class="mx-auto mb-8 mt-12 max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900"
-    >
+    <UCard id="hero" class="mx-auto mb-8 mt-12 max-w-2xl">
       <div class="mb-5 flex justify-center">
         <a
           href="https://www.access-nri.org.au"
@@ -18,9 +15,7 @@
           />
         </a>
       </div>
-      <p
-        class="mb-2 text-sm font-semibold uppercase text-blue-700 dark:text-blue-400"
-      >
+      <p class="mb-2 text-sm font-semibold uppercase text-primary">
         Climate model intelligence
       </p>
       <h1
@@ -28,22 +23,20 @@
       >
         CMIP7 Dashboard
       </h1>
-      <p
-        class="text-sm leading-relaxed text-gray-500 sm:text-base dark:text-gray-400"
-      >
+      <p class="text-sm leading-relaxed text-muted sm:text-base">
         A lightweight interface for tracking climate model outputs and derived
         metrics as runs progress.
       </p>
-    </section>
+    </UCard>
 
     <section
       class="mx-auto mb-12 grid max-w-2xl gap-4 sm:grid-cols-3"
       aria-label="Dashboard status"
     >
-      <div
+      <UCard
         v-for="item in statusCards"
         :key="item.label"
-        class="rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+        class="px-5 py-4"
       >
         <p
           class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500"
@@ -53,7 +46,7 @@
         <p class="mt-2 text-sm font-semibold text-gray-800 dark:text-gray-100">
           {{ item.value }}
         </p>
-      </div>
+      </UCard>
     </section>
 
     <DummyClimatePlot />
@@ -64,9 +57,7 @@
       :error="payuError"
     />
 
-    <section
-      class="mx-auto mb-12 max-w-2xl space-y-3 rounded-2xl border border-gray-200 bg-white p-5 text-sm leading-relaxed text-gray-600 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
-    >
+    <UCard class="mx-auto mb-12 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400">
       <h2
         class="text-sm font-semibold uppercase text-gray-700 dark:text-gray-200"
       >
@@ -81,9 +72,8 @@
       <div
         class="flex flex-wrap items-center gap-3 border-t border-gray-200 pt-3 dark:border-gray-700"
       >
-        <span class="text-xs text-gray-400 dark:text-gray-500"
-          >Built with ACCESS-NRI tooling</span
-        >
+        <span class="text-xs text-gray-400 dark:text-gray-500">Built with ACCESS-NRI tooling</span>
+        <UBadge color="neutral" variant="soft">Nuxt UI</UBadge>
         <a
           href="https://www.access-nri.org.au"
           target="_blank"
@@ -96,7 +86,7 @@
           />
         </a>
       </div>
-    </section>
+    </UCard>
   </main>
 </template>
 
@@ -108,7 +98,7 @@ import { loadPayuExperiments } from "@/services/payuExperiments";
 import type { PayuExperiment } from "@/services/payuExperiments";
 
 const statusCards = [
-  { label: "App", value: "Vue 3 + Vite" },
+  { label: "App", value: "Nuxt 4 + Nuxt UI" },
   { label: "Metrics", value: "TCRE-ready" },
   { label: "Charts", value: "Chart.js-ready" },
 ];

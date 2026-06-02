@@ -26,7 +26,7 @@ describe("DashboardHome", () => {
     const wrapper = mount(DashboardHome);
 
     expect(wrapper.text()).toContain("CMIP7 Dashboard");
-    expect(wrapper.text()).toContain("Vue 3 + Vite");
+    expect(wrapper.text()).toContain("Nuxt 4 + Nuxt UI");
     expect(wrapper.text()).toContain("CMIP7 readiness signal");
     expect(wrapper.text()).toContain("ACCESS-NRI tooling");
   });
