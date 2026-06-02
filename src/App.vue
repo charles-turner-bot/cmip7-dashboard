@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import AppHeader from "./components/AppHeader.vue";
-import { isNavigating } from "~/composables/useNavigationState";
+import { useNavigationState } from "~/composables/useNavigationState";
+
+const isNavigating = useNavigationState();
 </script>
 
 <template>

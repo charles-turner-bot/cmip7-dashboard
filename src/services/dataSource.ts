@@ -1,4 +1,4 @@
-import * as duckdb from "@duckdb/duckdb-wasm";
+import type * as duckdb from "@duckdb/duckdb-wasm";
 import {
   closeDuckDB,
   initializeDuckDB,
@@ -55,7 +55,8 @@ export async function registerParquetUrl(
   fileName: string,
   url: string,
 ): Promise<void> {
-  await db.registerFileURL(fileName, url, duckdb.DuckDBDataProtocol.HTTP, true);
+  const { DuckDBDataProtocol } = await import("@duckdb/duckdb-wasm");
+  await db.registerFileURL(fileName, url, DuckDBDataProtocol.HTTP, true);
 }
 
 export async function queryParquetSchema(
