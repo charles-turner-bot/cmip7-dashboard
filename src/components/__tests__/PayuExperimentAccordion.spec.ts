@@ -1,37 +1,21 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import PayuExperimentAccordion from "../PayuExperimentAccordion.vue";
 import type { PayuExperiment } from "@/services/payuExperiments";
 
-// Stub PrimeVue accordion components so tests run without a full PrimeVue
-// plugin installation, mirroring how DummyClimatePlot stubs vue-chartjs.
-vi.mock("primevue/accordion", () => ({
-  default: {
-    name: "Accordion",
-    props: ["value", "multiple"],
-    emits: ["update:value"],
-    template: '<div data-test="accordion-root"><slot /></div>',
+const TEST_STUBS = {
+  UBadge: {
+    name: "UBadge",
+    template: '<span class="u-badge"><slot /></span>',
   },
-}));
-vi.mock("primevue/accordionpanel", () => ({
-  default: {
-    name: "AccordionPanel",
-    props: ["value"],
-    template: '<div data-test="accordion-item"><slot /></div>',
+  UCollapsible: {
+    name: "UCollapsible",
+    props: ["open", "unmountOnHide"],
+    emits: ["update:open"],
+    template:
+      '<div data-test="accordion-item"><slot /><div data-test="accordion-content"><slot name="content" /></div></div>',
   },
-}));
-vi.mock("primevue/accordionheader", () => ({
-  default: {
-    name: "AccordionHeader",
-    template: '<button data-test="accordion-trigger"><slot /></button>',
-  },
-}));
-vi.mock("primevue/accordioncontent", () => ({
-  default: {
-    name: "AccordionContent",
-    template: '<div data-test="accordion-content"><slot /></div>',
-  },
-}));
+};
 
 const MOCK_EXPERIMENTS: PayuExperiment[] = [
   {
@@ -68,6 +52,9 @@ describe("PayuExperimentAccordion", () => {
   it("renders accordion items for each experiment", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: MOCK_EXPERIMENTS },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.findAll('[data-test="accordion-item"]')).toHaveLength(2);
@@ -78,6 +65,9 @@ describe("PayuExperimentAccordion", () => {
   it("shows the model current time and service units in the summary", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: [MOCK_EXPERIMENTS[0]!] },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.text()).toContain("0275-01-01T00:00:00");
@@ -87,6 +77,9 @@ describe("PayuExperimentAccordion", () => {
   it("renders all detail fields in the expanded panel", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: [MOCK_EXPERIMENTS[0]!] },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     const content = wrapper.find('[data-test="accordion-content"]');
@@ -98,6 +91,9 @@ describe("PayuExperimentAccordion", () => {
   it("shows the loading state while data is being fetched", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: [], loading: true },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.find('[data-test="payu-loading"]').exists()).toBe(true);
@@ -110,6 +106,9 @@ describe("PayuExperimentAccordion", () => {
         experiments: [],
         error: "Network request failed",
       },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.find('[data-test="payu-error"]').text()).toContain(
@@ -121,6 +120,9 @@ describe("PayuExperimentAccordion", () => {
   it("shows the empty state when there are no experiments", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: [] },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.find('[data-test="payu-empty"]').exists()).toBe(true);
@@ -132,6 +134,9 @@ describe("PayuExperimentAccordion", () => {
   it("accepts a custom empty message", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: [], emptyMessage: "No runs yet." },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     expect(wrapper.find('[data-test="payu-empty"]').text()).toContain(
@@ -142,6 +147,9 @@ describe("PayuExperimentAccordion", () => {
   it("starts with no open panels", () => {
     const wrapper = mount(PayuExperimentAccordion, {
       props: { experiments: MOCK_EXPERIMENTS },
+      global: {
+        stubs: TEST_STUBS,
+      },
     });
 
     const vm = wrapper.vm as { openPanels: string[] };

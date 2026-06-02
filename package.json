@@ -18,6 +18,7 @@
   "dependencies": {
     "@carbonplan/zarr-layer": "^0.4.1",
     "@duckdb/duckdb-wasm": "^1.32.0",
+    "@nuxt/ui": "^4.8.1",
     "@primeuix/themes": "^2.0.3",
     "@primevue/forms": "^4.5.4",
     "@primevue/themes": "^4.4.1",
